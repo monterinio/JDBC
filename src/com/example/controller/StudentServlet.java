@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.dao.DBConnection;
 import com.example.dao.StudentDao;
 import com.example.dao.StudentDaoImpl;
 import com.example.model.Student;
@@ -20,7 +21,7 @@ public class StudentServlet extends HttpServlet {
 	
 
 	public void init() {
-		studentDao = new StudentDaoImpl();
+		studentDao = new StudentDaoImpl(DBConnection.getDataSource());
 	}
 	
 	@Override

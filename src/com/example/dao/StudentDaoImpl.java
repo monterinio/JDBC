@@ -8,17 +8,24 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import com.example.model.Student;
 
 public class StudentDaoImpl implements StudentDao {
 
+	private DataSource dataSource;
+	
+	public StudentDaoImpl(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
 	
 	@Override
 	public void addStudent(Student student) {
 		PreparedStatement pStmt = null;
 		Connection conn = null;
 		try {
-			conn = DBConnection.getConnection();
+			conn = dataSource.getConnection();
 			pStmt = conn.prepareStatement("INSERT INTO students.student (firstname, lastname, city, birthday) VALUES(?,?,?,?);");
 			pStmt.setString(1, student.getFirstName());
 			pStmt.setString(2, student.getLastName());
@@ -39,7 +46,7 @@ public class StudentDaoImpl implements StudentDao {
 		ResultSet rSet = null;
 		Student student = null;
 		try {
-			conn = DBConnection.getConnection();
+			conn = dataSource.getConnection();
 			pStmt = conn.prepareStatement("SELECT firstname, lastname, city, birthday FROM students.student WHERE roll_no=?;");
 			pStmt.setInt(1, rollNo);
 			rSet = pStmt.executeQuery();
@@ -64,7 +71,7 @@ public class StudentDaoImpl implements StudentDao {
 		ResultSet rSet = null;
 		List<Student> students = new ArrayList<>();
 		try {
-			conn = DBConnection.getConnection();
+			conn = dataSource.getConnection();
 			stmt = conn.createStatement();
 			rSet = stmt.executeQuery("SELECT roll_no, firstname, lastname, city, birthday FROM students.student");
 			while(rSet.next()) {
@@ -90,7 +97,7 @@ public class StudentDaoImpl implements StudentDao {
 		ResultSet rSet = null;
 		int result = 0;
 		try {
-			conn = DBConnection.getConnection();
+			conn = dataSource.getConnection();
 			pStmt = conn.prepareStatement("UPDATE students.student SET firstname=?, lastname=?, city=?, birthday=? WHERE roll_no=?;");
 			pStmt.setString(1, student.getFirstName());
 			pStmt.setString(2, student.getLastName());
@@ -113,7 +120,7 @@ public class StudentDaoImpl implements StudentDao {
 		ResultSet rSet = null;
 		int result = 0;
 		try {
-			conn = DBConnection.getConnection();
+			conn = dataSource.getConnection();
 			pStmt = conn.prepareStatement("DELETE FROM students.student WHERE roll_no=? AND firstname=? AND lastname=? AND city=? AND birthday=?;");
 			pStmt.setInt(1,student.getRollNo());
 			pStmt.setString(2, student.getFirstName());

@@ -1,8 +1,5 @@
 package com.example.dao;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -14,8 +11,8 @@ public class DBConnection {
 	
 	private DBConnection() { };
 	
-	public static Connection getConnection() throws SQLException {
-		return getDSInstance().getConnection();
+	public static DataSource getDataSource() {
+		return getDSInstance();
 	}
 	
 	private static DataSource getDSInstance() {
