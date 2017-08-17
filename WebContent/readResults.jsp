@@ -22,7 +22,7 @@
 				<td><c:out value='${student.firstName}'/></td>
 				<td><c:out value='${student.lastName}'/></td>
 				<td><c:out value='${student.city}'/></td>
-				<td><c:out value='${student.birthDate}'/></td>
+				<td><c:out value='${student.birthDay}'/></td>
 			</tr>
 		</c:forEach>
 	</table>

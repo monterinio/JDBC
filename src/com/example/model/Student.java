@@ -7,7 +7,7 @@ public class Student {
 	private String firstName;
 	private String lastName;
 	private String city;
-	private Date birthDate;
+	private Date birthDay;
 	
 	public int getRollNo() {
 		return rollNo;
@@ -34,34 +34,34 @@ public class Student {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public Date getBirthDate() {
-		return birthDate;
+	public Date getBirthDay() {
+		return birthDay;
 	}
-	public void setBirthDate(Date birthDate) {
-		this.birthDate = birthDate;
+	public void setBirthDate(Date birthDay) {
+		this.birthDay = birthDay;
 	}
 	public Student() { }
-	public Student(int rollNo, String firstName, String lastName, String city, String birthDate) {
+	public Student(int rollNo, String firstName, String lastName, String city, String birthDay) {
 		super();
 		this.rollNo = rollNo;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.city = city;
-		this.birthDate = java.sql.Date.valueOf(birthDate);
+		this.birthDay = java.sql.Date.valueOf(birthDay);
 	}
-	public Student(int rollNo, String firstName, String lastName, String city, java.sql.Date birthDate) {
+	public Student(int rollNo, String firstName, String lastName, String city, java.sql.Date birthDay) {
 		super();
 		this.rollNo = rollNo;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.city = city;
-		this.birthDate = birthDate;
+		this.birthDay = birthDay;
 	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((birthDate == null) ? 0 : birthDate.hashCode());
+		result = prime * result + ((birthDay == null) ? 0 : birthDay.hashCode());
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
 		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
@@ -77,10 +77,10 @@ public class Student {
 		if (getClass() != obj.getClass())
 			return false;
 		Student other = (Student) obj;
-		if (birthDate == null) {
-			if (other.birthDate != null)
+		if (birthDay == null) {
+			if (other.birthDay != null)
 				return false;
-		} else if (!birthDate.equals(other.birthDate))
+		} else if (!birthDay.equals(other.birthDay))
 			return false;
 		if (city == null) {
 			if (other.city != null)
@@ -101,5 +101,11 @@ public class Student {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "Student [rollNo=" + rollNo + ", firstName=" + firstName + ", lastName=" + lastName + ", city=" + city
+		        + ", birthDate=" + birthDay + "]";
+	}
+	
 	
 }

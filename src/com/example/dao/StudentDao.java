@@ -5,7 +5,7 @@ import java.util.List;
 import com.example.model.Student;
 
 public interface StudentDao {
-	public void addStudent(Student student);
+	public int addStudent(Student student);
 	public Student readStudent(int rollNo);
 	public List<Student> readStudents();
 	public int updateStudent(Student student);

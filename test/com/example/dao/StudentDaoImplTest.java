@@ -1,11 +1,10 @@
 package com.example.dao;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.when;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,12 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 import com.example.model.Student;
 import com.mysql.jdbc.PreparedStatement;
@@ -32,16 +26,15 @@ import com.mysql.jdbc.PreparedStatement;
 @RunWith(MockitoJUnitRunner.class)
 public class StudentDaoImplTest {
 
-	@Mock NamedParameterJdbcTemplate mockTemplate;
 	@Mock DataSource mockDataSource;
-	@Mock BeanPropertySqlParameterSource sqlParameterSource;
+	@Mock Connection mockConn;
+	@Mock PreparedStatement mockPreparedStmt;
+	@Mock ResultSet mockResultSet;
+	@Mock Statement mockStatement;
 	
 	private Student testStudent;
 	private StudentDaoImpl dao;
 	private static int ONE = 1;
-	
-	private final static String CREATE = "INSERT INTO students.student (firstname, lastname, city, birthday) "
-			+ "VALUES(:firstName, :lastName, :city, :birthDate);";
 	
 	@Before
 	public void setUp() throws SQLException {
@@ -50,7 +43,20 @@ public class StudentDaoImplTest {
 		testStudent = new Student(1,"testName","testLastName","testCity","2000-01-01");
 		dao = new StudentDaoImpl(mockDataSource);
 		
-		when(mockTemplate.update(CREATE, sqlParameterSource));
+		when(mockDataSource.getConnection()).thenReturn(mockConn);
+		when(mockConn.prepareStatement(anyString())).thenReturn(mockPreparedStmt);
+		when(mockConn.createStatement()).thenReturn(mockStatement);
+		when(mockPreparedStmt.executeQuery()).thenReturn(mockResultSet);
+		when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
+		when(mockPreparedStmt.executeUpdate()).thenReturn(ONE);
+		
+		//Chained because of ReadStudents() method
+		when(mockResultSet.next()).thenReturn(true).thenReturn(false);
+		when(mockResultSet.getInt("roll_no")).thenReturn(1);
+		when(mockResultSet.getString("firstname")).thenReturn(testStudent.getFirstName());
+		when(mockResultSet.getString("lastname")).thenReturn(testStudent.getLastName());
+		when(mockResultSet.getString("city")).thenReturn(testStudent.getCity());
+		when(mockResultSet.getDate("birthday")).thenReturn(testStudent.getBirthDay());
 		
 	}
 	

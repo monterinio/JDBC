@@ -21,7 +21,7 @@
 			<td><c:out value='${requestScope.student.firstName}'/></td>
 			<td><c:out value='${requestScope.student.lastName}'/></td>
 			<td><c:out value='${requestScope.student.city}'/></td>
-			<td><c:out value='${requestScope.student.birthDate}'/></td>
+			<td><c:out value='${requestScope.student.birthDay}'/></td>
 		</tr>
 	</table>
 </body>
