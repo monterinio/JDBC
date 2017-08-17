@@ -1,12 +1,16 @@
 package com.example.dao;
-
+/*
+ * It would be better to use automapping via BeanPropertyRowMapper<Student>(Student.class)
+ * in readStudent() and readStudents() methods but somehow it couldn't map properly
+ * the date field and I couldn't find the reason why.
+ * 
+ */
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -20,7 +24,7 @@ public class StudentDaoImpl implements StudentDao {
 	private final static String CREATE = "INSERT INTO students.student (firstname, lastname, city, birthday) "
 			+ "VALUES(:firstName, :lastName, :city, :birthDay);";
 	private final static String READ = "SELECT firstname, lastname, city, birthday FROM students.student "
-			+ "WHERE roll_no=1;";
+			+ "WHERE roll_no=:rollNumber;";
 	private final static String UPDATE = "UPDATE students.student "
 			+ "SET firstname=:firstName, lastname=:lastName, city=:city, birthday=:birthDay WHERE roll_no=:rollNo;";
 	private final static String DELETE = "DELETE FROM students.student "
@@ -46,7 +50,7 @@ public class StudentDaoImpl implements StudentDao {
 		    @Override
 		    public Student mapRow(ResultSet resultSet, int rowNumber) throws SQLException {
 		    	return new Student(
-		    			1,
+		    			rollNo,
 		    			resultSet.getString("firstname"),
 		    			resultSet.getString("lastname"),
 		    			resultSet.getString("city"),
@@ -56,10 +60,19 @@ public class StudentDaoImpl implements StudentDao {
 		return student;
 	}
 	
-
 	@Override
 	public List<Student> readStudents() {
-		List<Student> students = template.query(READ_STUDENTS, BeanPropertyRowMapper.newInstance(Student.class));
+		List<Student> students =  template.query(READ_STUDENTS, new RowMapper<Student>(){
+			@Override
+			public Student mapRow(ResultSet resultSet, int rowNum) throws SQLException {
+				return new Student(
+		    			resultSet.getInt("roll_no"),
+		    			resultSet.getString("firstname"),
+		    			resultSet.getString("lastname"),
+		    			resultSet.getString("city"),
+		    			resultSet.getDate("birthday"));
+			}
+		});
 		return students;
 	}
 
