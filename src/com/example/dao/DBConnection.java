@@ -12,10 +12,6 @@ public class DBConnection {
 	private DBConnection() { };
 	
 	public static DataSource getDataSource() {
-		return getDSInstance();
-	}
-	
-	private static DataSource getDSInstance() {
 		if(dataSource == null) {
 			try {
 				Context initContext = new InitialContext();
